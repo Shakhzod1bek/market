@@ -6,7 +6,7 @@
 <title>Do'konim</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer onerror="console.warn('QRCode kutubxonasi yuklanmadi')"></script>
 <style>
 :root {
   --bg: #f7f7f5;
@@ -508,7 +508,7 @@ function refreshSaleGrid() {
   const list = Object.values(products);
   if (!list.length) { g.innerHTML = '<div style="color:var(--text-muted);font-size:13px">Mahsulotlar yo\'q</div>'; return; }
   g.innerHTML = list.map(p => `
-    <div class="product-card${p.qty===0?' out-of-stock':''}" onclick="${p.qty>0?`addToCart('${p.id}`):''}')">
+    <div class="product-card${p.qty===0?' out-of-stock':''}" onclick="${p.qty>0 ? "addToCart('"+p.id+"')" : ''}">
       ${productImgEl(p, 80)}
       <div class="pcard-body">
         <div class="pcard-name" title="${p.name}">${p.name}</div>
@@ -809,7 +809,11 @@ function toast(msg, type = '') {
 }
 
 // ==================== START ====================
-init();
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
 </script>
 </body>
 </html>
